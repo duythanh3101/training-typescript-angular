@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FileEnum } from 'src/app/entities/enums/FileEnum';
 import { IFileEntity } from 'src/app/entities/IFileEntity';
 import { DataFileService } from 'src/app/services/data/data-file.service';
 
@@ -10,6 +11,7 @@ import { DataFileService } from 'src/app/services/data/data-file.service';
 export class FileListComponent implements OnInit {
 
   files: IFileEntity[] = [];
+  displayFiles: IFileEntity[] = [];
 
   constructor(private dataSv: DataFileService) { }
 
@@ -18,9 +20,29 @@ export class FileListComponent implements OnInit {
       next: files => {
         //console.log('list', files);
         this.files = files;
+        this.displayFiles = files;
       },
       error: err => console.error(err)
     });
+  }
+
+  navigateTo(file: IFileEntity){
+    console.log('click file', file);
+    if (file.type === FileEnum.Folder){
+      this.displayFiles = file.subFolders;
+      // let res = this.getAllFilesOfFolder(file.subFolders, file.id);
+      // console.log('click folder', res);
+      // if (res){
+      // }
+    }
+  }
+
+  getAllFilesOfFolder(fodler: IFileEntity[], id: number): IFileEntity | undefined{
+    let res = fodler?.find(x => x.id == id);
+    if (res){
+      return res;
+    }
+    return;
   }
 
 }
