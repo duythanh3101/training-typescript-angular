@@ -141,7 +141,7 @@ export class DataFileService {
   }
 
   getFile(id: number): Observable<IFileEntity> {
-    console.log('getfile,', id, typeof (id))
+    //onsole.log('getfile,', id, typeof (id))
     if (Number(id) === 0) {
       return of(this.initializeFile());
     }
