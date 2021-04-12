@@ -59,14 +59,14 @@
 
 		<h1>Documents</h1>
 
-		<div class="button-row">
+		<!-- <div class="button-row">
 			<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#new-file-modal">
 				<i class="fas fa-file"></i> New file
 			</button>
 			<button type="submit" class="btn btn-primary" id="folderBtn">
 				<i class="fas fa-folder"></i> New folder
 			</button>
-		</div>
+		</div> -->
 
 		<table class="table" id='table-list'>
 			<thead>
@@ -87,98 +87,41 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr>
-					<td data-label="File Type">
-						<i class="far fa-folder"></i>
-					</td>
-					<td data-label="Name">CAS</td>
-					<td data-label="Modified">April 30</td>
-					<td data-label="Modified By">Megan Bowen</td>
-					<td></td>
-				</tr>
-				<tr>
-					<td data-label="File Type">
-						<img src="https://img.icons8.com/color/50/000000/ms-excel.png" alt="excel-icon"
+				<tr *ngFor='let item of files'>
+					<td data-label="File Type" [ngSwitch]="item.type">
+                                              
+						<img *ngSwitchCase="'FILE'" src="https://img.icons8.com/color/50/000000/ms-excel.png" alt="excel-icon"
 							class="excel-icon" />
+                        <i *ngSwitchCase="'FOLDER'" class="far fa-folder"></i>
 					</td>
 					<td data-label="Name">
 						<div class="col-name-item">
-							CoasterAndBargeLoading.xlsx
+							{{ item.name }}
 							<i class="fas fa-exclamation-circle"></i>
 						</div>
 
 					</td>
 					<td data-label="Modified">
-						A few seconds ago
+						{{ item.modified }}
 					</td>
 					<td data-label="Modified By">
-						Administrator MOD
+						{{ item.modifiedBy }}
 					</td>
 					<td></td>
+                    <td>
+                        <button class="btn btn-outline-primary btn-sm"
+                             [routerLink]="['/file-edit', item.id]">
+                          Edit
+                        </button>
+                      </td>
 				</tr>
-				<tr>
-					<td data-label="File Type">
-						<img src="https://img.icons8.com/color/50/000000/ms-excel.png" alt="excel-icon"
-							class="excel-icon" />
-					</td>
-					<td data-label="Name">
-						<div class="col-name-item">
-							RevenueByService.xlsx
-							<i class="fas fa-exclamation-circle is-new-file"></i>
-						</div>
-					</td>
-					<td data-label="Modified">
-						A few seconds ago
-					</td>
-					<td data-label="Modified By">
-						Administrator MOD
-					</td>
-					<td></td>
-				</tr>
-				<tr>
-					<td data-label="File Type">
-						<img src="https://img.icons8.com/color/50/000000/ms-excel.png" alt="excel-icon"
-							class="excel-icon" />
-					</td>
-					<td data-label="Name">
-						<div class="col-name-item">
-							RevenueByService2016.xlsx
-							<i class="fas fa-exclamation-circle"></i>
-						</div>
-					</td>
-					<td data-label="Modified">
-						A few seconds ago
-					</td>
-					<td data-label="Modified By">
-						Administrator MOD
-					</td>
-					<td></td>
-				</tr>
-				<tr>
-					<td data-label="File Type">
-						<img src="https://img.icons8.com/color/50/000000/ms-excel.png" alt="excel-icon"
-							class="excel-icon" />
-					</td>
-					<td data-label="Name">
-						<div class="col-name-item">
-							RevenueByService2017.xlsx
-							<i class="fas fa-exclamation-circle is-new-file"></i>
-						</div>
-					</td>
-					<td data-label="Modified">
-						A few seconds ago
-					</td>
-					<td data-label="Modified By">
-						Administrator MOD
-					</td>
-					<td></td>
-				</tr>
+				
 			</tbody>
 		</table>
 	</div>
 
 	<!-- Modal -->
-	<div class="modal fade" id="new-file-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+	<!-- <div class="modal fade" id="new-file-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
 		aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered" role="document">
 			<div class="modal-content">
@@ -207,7 +150,7 @@
 				</div>
 			</div>
 		</div>
-	</div>
+	</div> -->
 
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
 		integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
@@ -221,4 +164,4 @@
 		<script src="dist/js/home-page.js"></script>
 
 
-</div>>
+</div>

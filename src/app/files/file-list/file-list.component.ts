@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { IFileEntity } from 'src/app/entities/IFileEntity';
+import { DataFileService } from 'src/app/services/data/data-file.service';
 
 @Component({
   selector: 'app-file-list',
@@ -7,9 +9,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FileListComponent implements OnInit {
 
-  constructor() { }
+  files: IFileEntity[] = [];
+
+  constructor(private dataSv: DataFileService) { }
 
   ngOnInit(): void {
+    this.dataSv.getData().subscribe({
+      next: files => {
+        //console.log('list', files);
+        this.files = files;
+      },
+      error: err => console.error(err)
+    });
   }
 
 }
