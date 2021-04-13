@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { FileEnum } from 'src/app/entities/enums/FileEnum';
 import { IFileEntity } from 'src/app/entities/IFileEntity';
 import { DataFileService } from 'src/app/services/data/data-file.service';
 
@@ -14,13 +15,15 @@ export class FileEditComponent implements OnInit {
   pageTitle = 'File Edit';
   errorMessage: string = '';
   currentFile: IFileEntity | undefined;
+  fileSelector: string[] = [FileEnum.File, FileEnum.Folder];
 
   fileForm = this.fb.group({
     name: ['', [Validators.required,
     Validators.minLength(3),
     Validators.maxLength(50)]],
     type: '',
-    modifiedBy: ''
+    modifiedBy: '',
+    typeFile: {}
   });
   //private sub: Subscription;
 
