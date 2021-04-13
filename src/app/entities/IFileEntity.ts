@@ -9,4 +9,5 @@ export interface IFileEntity {
   name: string;
   type: FileEnum;
   subFolders: IFileEntity[];
+  parentId: number;
 }

@@ -128,7 +128,7 @@ export class DataFileService {
   }
 
   createFile(file: IFileEntity): Observable<IFileEntity> {
-    console.log('add', file);
+    //console.log('add', file);
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     file.id = Math.floor(Math.random() * 999);;
     return this.http.post<IFileEntity>(this.fileUrl, file, { headers })
@@ -136,8 +136,6 @@ export class DataFileService {
         tap(data => console.log('createFile: ' + JSON.stringify(data))),
         catchError(this.handleError)
       );
-    // this._data.push(file);
-    // return of(this._data[this._data.length - 1]);
   }
 
   getFile(id: number): Observable<IFileEntity> {
@@ -153,27 +151,27 @@ export class DataFileService {
       );
   }
 
-  // deleteProduct(id: number): Observable<{}> {
-  //   const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-  //   const url = `${this.productsUrl}/${id}`;
-  //   return this.http.delete<Product>(url, { headers })
-  //     .pipe(
-  //       tap(data => console.log('deleteProduct: ' + id)),
-  //       catchError(this.handleError)
-  //     );
-  // }
+  deletefile(id: number): Observable<{}> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    const url = `${this.fileUrl}/${id}`;
+    return this.http.delete<IFileEntity>(url, { headers })
+      .pipe(
+        tap(data => console.log('deletefile: ' + id)),
+        catchError(this.handleError)
+      );
+  }
 
-  // updateProduct(product: Product): Observable<Product> {
-  //   const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-  //   const url = `${this.productsUrl}/${product.id}`;
-  //   return this.http.put<Product>(url, product, { headers })
-  //     .pipe(
-  //       tap(() => console.log('updateProduct: ' + product.id)),
-  //       // Return the product on an update
-  //       map(() => product),
-  //       catchError(this.handleError)
-  //     );
-  // }
+  updateFile(file: IFileEntity): Observable<IFileEntity> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    const url = `${this.fileUrl}/${file.id}`;
+    return this.http.put<IFileEntity>(url, file, { headers })
+      .pipe(
+        tap(() => console.log('updateProduct: ' + file.id)),
+        // Return the product on an update
+        map(() => file),
+        catchError(this.handleError)
+      );
+  }
 
   private initializeFile(): IFileEntity {
     const timeElapsed = Date.now();
@@ -187,7 +185,8 @@ export class DataFileService {
       createAt: new Date(),
       createBy: '',
       modifiedBy: '',
-      subFolders: []
+      subFolders: [],
+      parentId: 0
     };
   }
 }

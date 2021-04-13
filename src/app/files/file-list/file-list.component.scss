@@ -64,9 +64,9 @@ $fa-font-path: '~@fortawesome/fontawesome-free/webfonts';
   }
   
   
-  // @media (hover: none) {
-  //   table tr:hover { color: red; }
-  // }
+  .back-icon{
+    margin-bottom: 3px;
+  }
   
   @include media-breakpoint-down(md) {
     table {

@@ -44,7 +44,10 @@ export class FileEditComponent implements OnInit {
   getCurrentFile(id: any): void{
     this.dataSv.getFile(id)
     .subscribe({
-      next: (file: IFileEntity) => this.displayFile(file),
+      next: (file: IFileEntity) => {
+        file.parentId = Number(localStorage.getItem('parentId'));
+        this.displayFile(file);
+      },
       error: err => this.errorMessage = err
     });
   }
@@ -75,7 +78,6 @@ export class FileEditComponent implements OnInit {
     if (this.fileForm.valid) {
       if (this.fileForm.dirty) {
         const p = { ...this.currentFile, ...this.fileForm.value };
-        console.log('123 ', this.currentFile)
         if (p.id === 0) {
           this.dataSv.createFile(p)
             .subscribe({
@@ -83,11 +85,11 @@ export class FileEditComponent implements OnInit {
               error: (err: string) => this.errorMessage = err
             });
         } else {
-          // this.productService.updateProduct(p)
-          //   .subscribe({
-          //     next: () => this.onSaveComplete(),
-          //     error: err => this.errorMessage = err
-          //   });
+          this.dataSv.updateFile(p)
+            .subscribe({
+              next: () => this.onSaveComplete(),
+              error: err => this.errorMessage = err
+            });
         }
 
       } else {
@@ -99,9 +101,21 @@ export class FileEditComponent implements OnInit {
 
   }
 
-
-  deleteFile() {
-
+  deleteFile(){
+    if (this.currentFile){
+      if (this.currentFile.id === 0) {
+        // Don't delete, it was never saved.
+        this.onSaveComplete();
+      } else {
+        if (confirm(`Really delete the product: ${this.currentFile?.name}?`)) {
+          this.dataSv.deletefile(this.currentFile.id ?? 0)
+            .subscribe({
+              next: () => this.onSaveComplete(),
+              error: err => this.errorMessage = err
+            });
+        }
+      }
+    }
   }
 
 

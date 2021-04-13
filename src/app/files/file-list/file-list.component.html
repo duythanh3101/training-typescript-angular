@@ -1,5 +1,5 @@
 <div>
-    <!-- <div>
+	<!-- <div>
         <nav class="navbar navbar-expand-lg navbar-light navbar-background navbar-container">
             <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse" data-target="#navbarText"
                 aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,10 +53,14 @@
             </div>
         </nav>
     </div> -->
-  
+
 
 	<div class="container-fluid table-container">
 
+		<button class="btn btn-outline-primary btn-sm" [disabled]='backBtnDisable' (click)='goBack()'>
+			<i class="fas fa-arrow-left back-icon"></i>
+			Back
+		</button> 
 		<h1>Documents</h1>
 
 		<!-- <div class="button-row">
@@ -89,10 +93,10 @@
 			<tbody>
 				<tr *ngFor='let item of displayFiles' (click)='navigateTo(item)'>
 					<td data-label="File Type" [ngSwitch]="item.type">
-                                              
-						<img *ngSwitchCase="'FILE'" src="https://img.icons8.com/color/50/000000/ms-excel.png" alt="excel-icon"
-							class="excel-icon" />
-                        <i *ngSwitchCase="'FOLDER'" class="far fa-folder"></i>
+
+						<img *ngSwitchCase="'FILE'" src="https://img.icons8.com/color/50/000000/ms-excel.png"
+							alt="excel-icon" class="excel-icon" />
+						<i *ngSwitchCase="'FOLDER'" class="far fa-folder"></i>
 					</td>
 					<td data-label="Name">
 						<div class="col-name-item">
@@ -108,14 +112,18 @@
 						{{ item.modifiedBy }}
 					</td>
 					<td></td>
-                    <td>
-                        <button class="btn btn-outline-primary btn-sm"
-                             [routerLink]="['/file-edit', item.id]">
-                          Edit
-                        </button>
-                      </td>
+					<td>
+						<button class="btn btn-outline-primary btn-sm" [routerLink]="['/file-edit', item.id]">
+							Edit
+						</button>
+					</td>
+					<!-- <td>
+						<button class="btn btn-outline-primary btn-sm" (click)='deleteFile(item)'>
+							Delete
+						</button>
+					</td> -->
 				</tr>
-				
+
 			</tbody>
 		</table>
 	</div>
@@ -129,7 +137,7 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
 		integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
 		crossorigin="anonymous"></script>
-		<script src="dist/js/home-page.js"></script>
+	<script src="dist/js/home-page.js"></script>
 
 
 </div>
