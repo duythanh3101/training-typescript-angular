@@ -71,6 +71,7 @@ export class FileListComponent implements OnInit {
     if (id !== -1) {
       this.currentParentId = id;
       this.displayFiles = this.files.filter(x => x.parentId === id);
+      localStorage.setItem(parentId, this.currentParentId.toString());
     }
   }
 
