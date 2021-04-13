@@ -1,101 +1,31 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { FileEnum } from 'src/app/entities/enums/FileEnum';
-import { FileType } from 'src/app/entities/FileType';
-import { Folder } from 'src/app/entities/Folder';
-import { IFileEntity } from 'src/app/entities/IFileEntity';
+import { select, Store } from '@ngrx/store';
 import { Observable, of, throwError } from 'rxjs';
-import { catchError, tap, map } from 'rxjs/operators';
-import { error } from 'selenium-webdriver';
-
-const dataFiles = [
-  {
-    id: 100,
-    name: 'Hihi',
-    modified: '03/03/2021',
-    modifiedBy: 'Thanh Duy Pham',
-    subFolders: [
-      {
-        id: 1,
-        name: 'aaaa.exe',
-        createDate: new Date('09/04/2021'),
-        createBy: 'aaaa',
-        type: 'FILE',
-        modified: '09/03/2021',
-        modifiedBy: 'Tran Minh Hoang',
-      },
-      {
-        id: 2,
-        name: 'bbb.exe',
-        createDate: new Date('09/04/2021'),
-        createBy: 'bbb',
-        type: 'FILE',
-        modified: '09/03/2021',
-        modifiedBy: 'Tran Minh Hoang',
-      },
-      {
-        subFolders: [
-          {
-            id: 3,
-            name: 'cccc.exe',
-            createDate: new Date('09/04/2021'),
-            createBy: 'cccc',
-            type: 'FILE',
-            modified: '09/03/2021',
-            modifiedBy: 'Tran Minh Hoang',
-          },
-          {
-            id: 4,
-            name: 'dddd.exe',
-            createDate: new Date('09/04/2021'),
-            createBy: 'dddd',
-            type: 'FILE',
-            modified: '09/03/2021',
-            modifiedBy: 'Tran Minh Hoang',
-          },
-        ],
-        type: 'FOLDER'
-      },
-    ],
-    type: 'FOLDER'
-  },
-
-  {
-    id: 5,
-    name: 'eeee.exe',
-    createDate: new Date('09/04/2021'),
-    createBy: 'eeee',
-    type: 'FILE',
-    modified: '09/03/2021',
-    modifiedBy: 'Tran Minh Hoang',
-  },
-  {
-    id: 6,
-    name: 'ffff.exe',
-    createDate: new Date('09/04/2021'),
-    createBy: 'ffff',
-    type: 'FILE',
-    modified: '09/03/2021',
-    modifiedBy: 'Tran Minh Hoang',
-  },
-];
+import { catchError, map, tap } from 'rxjs/operators';
+import { FileEnum } from 'src/app/entities/enums/FileEnum';
+import { IFileEntity } from 'src/app/entities/IFileEntity';
+import { FileEntityState } from 'src/app/redux/reducers/file.reducers';
+import { selectFiles } from 'src/app/redux/store/selector/file.selectors';
 
 @Injectable({
   providedIn: 'root'
 })
-export class DataFileService {
+export class DataFilePersistService {
 
   private fileUrl = 'api/files';
-  private _data: Array<IFileEntity> = [];
-  constructor(private http: HttpClient) {
+  fileList$: Observable<IFileEntity[]> | undefined;
 
+  constructor(private http: HttpClient, private store: Store<{ fileRx: FileEntityState }>) {
+    
   }
   getData = (): Observable<IFileEntity[]> => {
-    return this.http.get<IFileEntity[]>(this.fileUrl)
-      .pipe(
-        tap(data => JSON.stringify(data)),
-        catchError(this.handleError)
-      );
+    this.fileList$ = this.store.pipe(select(selectFiles));
+    this.fileList$.subscribe({
+      next: ((data: any)=> {console.log(data)}),
+      error: catchError(this.handleError)
+    })
+    return this.fileList$;
   }
 
   private handleError(error: any) {

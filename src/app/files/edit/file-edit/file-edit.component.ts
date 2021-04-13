@@ -39,7 +39,6 @@ export class FileEditComponent implements OnInit {
       params => {
         const id = params.get('id');
         this.getCurrentFile(id);
-        //console.log('id: ', id)
       }
     );
   }
@@ -60,7 +59,6 @@ export class FileEditComponent implements OnInit {
       this.fileForm.reset();
     }
     this.currentFile = file;
-    console.log('currentFile', file)
 
     if (this.currentFile.id === 0) {
       this.pageTitle = 'Add File';

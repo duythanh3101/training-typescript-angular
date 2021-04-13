@@ -132,5 +132,8 @@
       }
     }
   },
-  "defaultProject": "training-typescript-angular"
+  "defaultProject": "training-typescript-angular",
+  "cli": {
+    "defaultCollection": "@ngrx/schematics"
+  }
 }

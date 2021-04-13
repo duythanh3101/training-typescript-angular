@@ -10,13 +10,19 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { FileData } from './services/data/file-data';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { environment } from 'src/environments/environment';
+import { StoreModule } from '@ngrx/store';
+import { fileReducer, fileFeatureKey } from './redux/reducers/file.reducers';
+import { FileListPersistComponent } from './files/file-list-persist/file-list-persist.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     FileListComponent,
     NavbarComponent,
-    FileEditComponent
+    FileEditComponent,
+    FileListPersistComponent
   ],
   imports: [
     BrowserModule,
@@ -24,6 +30,11 @@ import { FileData } from './services/data/file-data';
     ReactiveFormsModule,
     HttpClientModule,
     InMemoryWebApiModule.forRoot(FileData),
+    //StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
+    StoreModule.forRoot({ }),
+    StoreModule.forFeature(fileFeatureKey, fileReducer),
+    !environment.production ? StoreDevtoolsModule.instrument() : []
+    
   ],
   providers: [],
   bootstrap: [AppComponent]

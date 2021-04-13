@@ -1,24 +1,27 @@
 import { Component, OnInit } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { FileEnum } from 'src/app/entities/enums/FileEnum';
 import { IFileEntity } from 'src/app/entities/IFileEntity';
 import { addFile } from 'src/app/redux/actions/file.actions';
 import { DataFileService } from 'src/app/services/data/data-file.service';
 import { selectFiles } from 'src/app/redux/store/selector/file.selectors';
 import { FileEntityState, fileFeatureKey } from 'src/app/redux/reducers/file.reducers';
-import { map, filter } from 'rxjs/operators';
+import { map, filter, catchError } from 'rxjs/operators';
+import { error } from 'selenium-webdriver';
 
 const parentId = 'parentId';
 
 @Component({
-  selector: 'app-file-list',
-  templateUrl: './file-list.component.html',
-  styleUrls: ['./file-list.component.scss']
+  selector: 'app-file-list-persist',
+  templateUrl: './file-list-persist.component.html',
+  styleUrls: ['./file-list-persist.component.scss']
 })
-export class FileListComponent implements OnInit {
+export class FileListPersistComponent implements OnInit {
 
   //#region [Properties]
+  fileList$: Observable<IFileEntity[]>;
+  displayFileList$: Observable<IFileEntity[]>;
   files: IFileEntity[] = [];
   displayFiles: IFileEntity[] = [];
 
@@ -35,22 +38,22 @@ export class FileListComponent implements OnInit {
   //#endregion [Properties]
 
   //#region [Constructor]
-  constructor(private dataSv: DataFileService) {
-
+  constructor(private dataSv: DataFileService, private store: Store<{ fileRx: FileEntityState }>) {
+    this.fileList$ = this.store.pipe(select(selectFiles));
+    this.displayFileList$ = this.fileList$;
   }
 
   ngOnInit(): void {
     this.currentParentId = Number(localStorage.getItem(parentId));
-    this.dataSv.getData().subscribe({
-      next: files => {
-        this.files = files;
-        this.displayFiles = files.filter(x => x.parentId === this.currentParentId);
+    this.displayFileList$ = this.store.pipe(select(selectFiles),
+      map(arr => arr.filter(x => x.parentId == this.currentParentId))
+    );
 
-        // Put the object into storage
-        localStorage.setItem('STORE_DATA', JSON.stringify(files));
-      },
-      error: err => console.error(err)
-    });
+  }
+
+  private handleError(error: any) {
+    console.error(error);
+    return throwError(error)
   }
   //#endregion [Constructor]
 
@@ -60,7 +63,7 @@ export class FileListComponent implements OnInit {
   navigateTo(file: IFileEntity) {
     //console.log('click file', file);
     if (file.type === FileEnum.Folder) {
-      this.displayFiles = this.files.filter(f => f.parentId == file.id);
+      this.displayFileList$ = this.fileList$.pipe(map(arr => arr.filter(f => f.parentId == file.id)));
       localStorage.setItem(parentId, file.id.toString());
       this.currentParentId = file.id;
     }
@@ -68,19 +71,25 @@ export class FileListComponent implements OnInit {
 
   goBack() {
     let id = this.getParentFolder(this.currentParentId);
+    //console.log('goback', id);
     if (id !== -1) {
       this.currentParentId = id;
-      this.displayFiles = this.files.filter(x => x.parentId === id);
+      this.displayFileList$ = this.fileList$.pipe(map(arr => arr.filter(f => f.parentId == id)));
     }
   }
 
   getParentFolder(currentParentId: number): number {
-    let f = this.files.find(x => x.id == currentParentId);
-    if (f) {
-      return f.parentId;
-    }
+    //console.log('getParentFolder', currentParentId)
+    let parentIds = -1;
+    this.fileList$.pipe(map(arr => arr.find(f => f.id == currentParentId))).subscribe({
+      next: data => {
+        console.log('getParentFolder data', data)
+        parentIds = data?.parentId ?? -1;
+      },
+      error: error => { }
+    })
 
-    return -1;
+    return parentIds;
   }
   //#endregion [Public Methods]
 

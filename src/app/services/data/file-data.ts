@@ -5,7 +5,7 @@ import { IFileEntity } from '../../entities/IFileEntity';
 export class FileData implements InMemoryDbService {
 
   createDb() {
-    const files: IFileEntity[] = [
+    let files: IFileEntity[] = [
       {
         id: 1,
         name: 'Hihi',
@@ -15,7 +15,8 @@ export class FileData implements InMemoryDbService {
         type: FileEnum.Folder,
         createAt: new Date('09/04/2021'),
         createBy: 'hohoho',
-        parentId: 0
+        parentId: 0,
+        isNewFile: false
       },
 
       {
@@ -27,7 +28,8 @@ export class FileData implements InMemoryDbService {
         modified: '09/03/2021',
         modifiedBy: 'Tran Minh Hoang',
         subFolders: [],
-        parentId: 0
+        parentId: 0,
+        isNewFile: true
       },
       {
         id: 3,
@@ -38,7 +40,8 @@ export class FileData implements InMemoryDbService {
         modified: '09/03/2021',
         modifiedBy: 'Tran Minh Hoang',
         subFolders: [],
-        parentId: 0
+        parentId: 0,
+        isNewFile: false
       },
       {
         id: 4,
@@ -49,7 +52,8 @@ export class FileData implements InMemoryDbService {
         modified: '09/03/2021',
         modifiedBy: 'Tran Minh Hoang',
         subFolders: [],
-        parentId: 1
+        parentId: 1,
+        isNewFile: false
       },
       {
         id: 5,
@@ -60,7 +64,8 @@ export class FileData implements InMemoryDbService {
         modified: '09/03/2021',
         modifiedBy: 'Tran Minh Hoang',
         subFolders: [],
-        parentId: 1
+        parentId: 1,
+        isNewFile: false
       },
       {
         subFolders: [],
@@ -71,7 +76,8 @@ export class FileData implements InMemoryDbService {
         createBy: 'dddd',
         modified: '09/03/2021',
         modifiedBy: 'Tran Minh Hoang',
-        parentId: 1
+        parentId: 1,
+        isNewFile: false
       },
       {
         id: 7,
@@ -82,7 +88,8 @@ export class FileData implements InMemoryDbService {
         modified: '09/03/2021',
         modifiedBy: 'Tran Minh Hoang',
         subFolders: [],
-        parentId: 6
+        parentId: 6,
+        isNewFile: false
       },
       {
         id: 8,
@@ -93,9 +100,14 @@ export class FileData implements InMemoryDbService {
         modified: '09/03/2021',
         modifiedBy: 'Tran Minh Hoang',
         subFolders: [],
-        parentId: 6
+        parentId: 6,
+        isNewFile: false
       },
     ];
+    let storeFiles = localStorage.getItem('STORE_DATA');
+    if (storeFiles){
+      files = JSON.parse(storeFiles);
+    }
     return { files };
   }
 }

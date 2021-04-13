@@ -60,7 +60,7 @@
 		<button class="btn btn-outline-primary btn-sm" [disabled]='backBtnDisable' (click)='goBack()'>
 			<i class="fas fa-arrow-left back-icon"></i>
 			Back
-		</button> 
+		</button>
 		<h1>Documents</h1>
 
 		<!-- <div class="button-row">
@@ -101,9 +101,8 @@
 					<td data-label="Name">
 						<div class="col-name-item">
 							{{ item.name }}
-							<i class="fas fa-exclamation-circle"></i>
+							<i class="fas fa-exclamation-circle" *ngIf='item.isNewFile'></i>
 						</div>
-
 					</td>
 					<td data-label="Modified">
 						{{ item.modified }}
@@ -127,6 +126,13 @@
 			</tbody>
 		</table>
 	</div>
+
+	<!-- <h4>List of file</h4>
+	<div *ngIf='fileList$'>
+		<div *ngFor="let file of fileList$ | async; let i=index">
+			<span>{{i+1}}.</span> {{file.name}}
+		</div>
+	</div> -->
 
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
 		integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"

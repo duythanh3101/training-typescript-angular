@@ -10,4 +10,5 @@ export interface IFileEntity {
   type: FileEnum;
   subFolders: IFileEntity[];
   parentId: number;
+  isNewFile: boolean;
 }
